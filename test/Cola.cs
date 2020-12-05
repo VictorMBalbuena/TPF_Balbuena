@@ -24,8 +24,13 @@ namespace DeepSpace
 			return this.datos[0]; 
 		}
 		
-			public bool esVacia() {
+		public bool esVacia() 
+		{
 				return this.datos.Count == 0;
-			}
 		}
+		public int cantElementos
+		{
+			get{return this.datos.Count;}
+		}
+	}
 }

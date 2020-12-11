@@ -69,7 +69,7 @@ namespace DeepSpace
 						x.encolar(hijo);
 					}
 				}
-				mensaje+="Nivel "+nivel+":"+cantidadPorNivel+"--";
+				mensaje+="Nivel "+"("+nivel+":"+cantidadPorNivel+")"+"-";
 			}
 			return mensaje;
 		}

@@ -106,7 +106,88 @@ namespace DeepSpace
 		
 		public Movimiento CalcularMovimiento(ArbolGeneral<Planeta> arbol)
 		{
+			
+			List<Planeta> caminoHaciaRaiz = null;
+			List<Planeta> caminoHaciaJugador = null;
+
+			caminoHaciaRaiz = CaminoRaizIA(arbol, new List<Planeta>());
+			caminoHaciaRaiz.Reverse();//la funcion reverse sirve para invertir el array,la lista
+
+			caminoHaciaJugador = CaminoRaizJugador(arbol, new List<Planeta>());
+
+			if (!arbol.getDatoRaiz().EsPlanetaDeLaIA())
+			{
+				Movimiento movARaiz = new Movimiento(caminoHaciaRaiz[0], caminoHaciaRaiz[1]);
+				return movARaiz;
+			}
+			else
+			{
+				
+				for(int index=0; index< caminoHaciaJugador.Count; index++)
+				{
+					if (caminoHaciaJugador[index].EsPlanetaDeLaIA() && 
+							(caminoHaciaJugador[index+1].EsPlanetaNeutral()||caminoHaciaJugador[index+1].EsPlanetaDelJugador()))
+					{
+						Movimiento MovdeJugador = new Movimiento(caminoHaciaJugador[index], caminoHaciaJugador[index+1]);
+						return MovdeJugador;
+					}
+				}
+	
+			}
+			
+			return null;
+		}
 		
+		public List<Planeta> CaminoRaizIA(ArbolGeneral<Planeta> arbol, List<Planeta> caminoDeLaIA)
+		{
+			
+			caminoDeLaIA.Add(arbol.getDatoRaiz());
+
+			if (arbol.getDatoRaiz().EsPlanetaDeLaIA())
+			{
+				return caminoDeLaIA;
+			}
+			else
+			{
+				foreach(var hijo in arbol.getHijos())
+				{
+					
+					List<Planeta> caminoAux = CaminoRaizIA(hijo, caminoDeLaIA);
+						if (caminoAux != null)
+						{
+							return caminoAux;
+						}
+					
+				}
+				caminoDeLaIA.RemoveAt(caminoDeLaIA.Count-1);
+			}
+			return null;
+		}
+		
+		public List<Planeta> CaminoRaizJugador(ArbolGeneral<Planeta> arbol, List<Planeta> caminoDeRaizAJugador)
+		{
+
+			caminoDeRaizAJugador.Add(arbol.getDatoRaiz());
+
+			if (arbol.getDatoRaiz().EsPlanetaDelJugador())
+			{
+				return caminoDeRaizAJugador;
+			}
+			else
+			{	
+				foreach (var hijo in arbol.getHijos())
+				{
+
+					List<Planeta> caminoAux = CaminoRaizJugador(hijo, caminoDeRaizAJugador);
+					if (caminoAux != null)
+					{
+						return caminoAux;
+					}
+
+				}
+				caminoDeRaizAJugador.RemoveAt(caminoDeRaizAJugador.Count-1);
+
+			}
 			return null;
 		}
 	
